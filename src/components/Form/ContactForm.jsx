@@ -15,7 +15,7 @@ export class ContactForm extends Component {
     const { name, number } = this.state;
     e.preventDefault();
     this.props.onSubmit(name, number);
-    this.reset();
+    this.resetState();
   };
 
   handleNameChange = (e) => {
@@ -23,7 +23,7 @@ export class ContactForm extends Component {
     this.setState({ [name]: value });
   };
 
-  reset = () => {
+  resetState = () => {
     this.setState({ name: "", number: "" });
   };
 

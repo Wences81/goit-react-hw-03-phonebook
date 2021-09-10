@@ -5,9 +5,9 @@ import { Label, Input } from "./Filter.styled";
 const Filter = ({ value, onChange }) => {
   return (
     <>
-      <Label>
+      <Label htmlFor={"lab"}>
         Find contacts by name
-        <Input type="text" value={value} onChange={onChange}></Input>
+        <Input type="text" id={"lab"} value={value} onChange={onChange} />
       </Label>
     </>
   );

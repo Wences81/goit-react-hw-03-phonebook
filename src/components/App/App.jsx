@@ -1,10 +1,9 @@
 import { Component } from "react";
 import { v4 as uuidv4 } from "uuid";
-import ContactForm from "./components/Form/ContactForm";
-import ContactList from "./components/List/ContactList";
-import Filter from "./components/Filter/Filter";
-import { Title } from "./components/Title.styled";
-import "./App.css";
+import ContactForm from "../Form/ContactForm";
+import ContactList from "../List/ContactList";
+import Filter from "../Filter/Filter";
+import { Title } from "./App.styled";
 
 export class App extends Component {
   state = {
@@ -18,27 +17,27 @@ export class App extends Component {
   };
 
   formSubmitHandler = (name, number) => {
-    if (
-      this.state.contacts.find(
-        (contact) => contact.name.toLowerCase() === name.toLowerCase()
-      )
-    ) {
-      alert(`${name} is already in contacts!`);
-      return;
-    }
-
     const newContact = {
       id: uuidv4(),
       name,
       number,
     };
 
-    this.setState(({ contacts }) => ({
-      contacts: [newContact, ...contacts],
-    }));
+    this.setState((prevState) => {
+      const duplicateContact = this.state.contacts.find(
+        (contact) => contact.name.toLowerCase() === name.toLowerCase()
+      );
+      if (duplicateContact) {
+        alert(`${name} is alredy in contacts`);
+        return { ...prevState };
+      }
+      return {
+        contacts: [newContact, ...prevState.contacts],
+      };
+    });
   };
 
-  deleteContacts = (contactId) => {
+  deleteContact = (contactId) => {
     this.setState((prevState) => ({
       contacts: prevState.contacts.filter(
         (contact) => contact.id !== contactId
@@ -48,6 +47,13 @@ export class App extends Component {
 
   changeFilter = (e) => {
     this.setState({ filter: e.currentTarget.value });
+  };
+
+  getFilteredContacts = () => {
+    const { filter, contacts } = this.state;
+    return contacts.filter((contact) =>
+      contact.name.toLocaleLowerCase().includes(filter.toLocaleLowerCase())
+    );
   };
 
   componentDidMount() {
@@ -66,11 +72,6 @@ export class App extends Component {
   }
 
   render() {
-    const normalizedFilter = this.state.filter.toLocaleLowerCase();
-    const activeContacts = this.state.contacts.filter((contact) =>
-      contact.name.toLocaleLowerCase().includes(normalizedFilter)
-    );
-
     return (
       <div>
         <Title>Phonebook</Title>
@@ -78,8 +79,8 @@ export class App extends Component {
         <Title>Contacts</Title>
         <Filter value={this.state.filter} onChange={this.changeFilter} />
         <ContactList
-          contacts={activeContacts}
-          onDeleteContacts={this.deleteContacts}
+          contacts={this.getFilteredContacts()}
+          onDeleteContacts={this.deleteContact}
         />
       </div>
     );

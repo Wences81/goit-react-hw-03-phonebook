@@ -8,6 +8,7 @@ export const Button = styled.button`
   text-transform: uppercase;
   font-size: 14px;
   background-color: green;
+  cursor: pointer;
 `;
 
 export const List = styled.ul`
