@@ -28,7 +28,7 @@ export class App extends Component {
         (contact) => contact.name.toLowerCase() === name.toLowerCase()
       );
       if (duplicateContact) {
-        alert(`${name} is alredy in contacts`);
+        alert(`${name} is already in contacts`);
         return { ...prevState };
       }
       return {
@@ -60,9 +60,7 @@ export class App extends Component {
     const contacts = localStorage.getItem("contacts");
     const parsedContacts = JSON.parse(contacts);
 
-    if (parsedContacts) {
-      this.setState({ contacts: parsedContacts });
-    }
+    parsedContacts && this.setState({ contacts: parsedContacts });
   }
 
   componentDidUpdate(prevProps, prevState) {
